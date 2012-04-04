@@ -68,6 +68,7 @@
     function renderAll() {
       chart.each(render);
       list.each(render);
+      window.DUGONG.map_render();
       d3.select("#active").text(formatNumber(all.value()));
     }
 

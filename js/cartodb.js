@@ -6,7 +6,7 @@
     this.data = [];
     this.query("SELECT * FROM dugongs LIMIT 500", function(data){
       window.DUGONG.create_graphs(data.rows);
-      window.DUGONG.draw_dugongs(data.rows);
+      //window.DUGONG.draw_dugongs();
     });
   },
   query : function(sql, callback, proxy) {
