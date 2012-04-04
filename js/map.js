@@ -16,4 +16,12 @@ $(function() {
 
   window.DUGONG.CartoDB.init();
 
+  window.DUGONG.draw_dugongs = function(data){
+    $.each(data, function(idx){
+      var markerLocation = new L.LatLng(this.latitude, this.longitude);
+      var marker = new L.Marker(markerLocation);
+      window.DUGONG.map.addLayer(marker);
+    });
+  }
+
 });
