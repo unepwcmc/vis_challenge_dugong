@@ -16,6 +16,13 @@ $(function() {
 
   window.DUGONG.CartoDB.init();
 
+  window.DUGONG.DugongIcon = L.Icon.extend({
+      iconUrl: 'dugong.png',
+      iconSize: new L.Point(50, 17),
+      iconAnchor: new L.Point(50, 17),
+      shadowSize: new L.Point(0, 0)
+  });
+
   window.DUGONG.draw_dugongs = function(){
     $.each(window.DUGONG.map_markers, function(idx){
       //var markerLocation = new L.LatLng(this.latitude, this.longitude);
@@ -37,7 +44,8 @@ $(function() {
     window.DUGONG.remove_dugongs();
     $('.dugong').each(function(e){
       var latlng = new L.LatLng($(this).find('.latitude').text(), $(this).find('.longitude').text());
-      window.DUGONG.map_markers.push(new L.Marker(latlng));
+      var icon = new window.DUGONG.DugongIcon();
+      window.DUGONG.map_markers.push(new L.Marker(latlng, {icon: icon}));
     });
     window.DUGONG.draw_dugongs();
   }
