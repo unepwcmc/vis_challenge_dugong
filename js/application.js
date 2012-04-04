@@ -1,7 +1,7 @@
 $(function() {
 
   // (It's CSV, but GitHub Pages only gzip's JSON at the moment.)
-  d3.csv("/flights-3m.json", function(flights) {
+  window.DUGONG.create_graphs = function(flights) {
 
     // Various formatters.
     var formatNumber = d3.format(",d"),
@@ -340,6 +340,6 @@ $(function() {
 
       return d3.rebind(chart, brush, "on");
     }
-  });
+  };
 
 });
