@@ -9,18 +9,6 @@ $(function() {
         formatDate = d3.time.format("%B %d, %Y"),
         formatTime = d3.time.format("%I:%M %p");
 
-    // A nest operator, for grouping the dugong list.
-    var nestByDate = d3.nest()
-        .key(function(d) { return d3.time.day(d.date); });
-
-    // A little coercion, since the CSV is untyped.
-    dugongs.forEach(function(d, i) {
-      d.index = i;
-      d.date = parseDate(d.date);
-      d.delay = +d.delay;
-      d.distance = +d.distance;
-    });
-
     // Create the crossfilter for the relevant dimensions and groups.
     var dugong = crossfilter(dugongs),
         all = dugong.groupAll(),
@@ -41,7 +29,7 @@ $(function() {
       barChart()
           .dimension(season)
           .group(seasons)
-        .x(d3.time.linear())
+        .x(d3.scale.linear())
 
     ];
 
@@ -51,10 +39,6 @@ $(function() {
     var chart = d3.selectAll(".chart")
         .data(charts)
         .each(function(chart) { chart.on("brush", renderAll).on("brushend", renderAll); });
-
-    // Render the initial lists.
-    var list = d3.selectAll(".list")
-        .data([dugongList]);
 
     // Render the total.
     d3.selectAll("#total")
@@ -70,7 +54,6 @@ $(function() {
     // Whenever the brush moves, re-rendering everything.
     function renderAll() {
       chart.each(render);
-      list.each(render);
       d3.select("#active").text(formatNumber(all.value()));
     }
 
