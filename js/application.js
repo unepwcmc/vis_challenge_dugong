@@ -106,33 +106,39 @@
 
           // Create the skeletal chart.
           if (g.empty()) {
+            // reset button
             div.select(".title").append("a")
                 .attr("href", "javascript:reset(" + id + ")")
                 .attr("class", "reset")
                 .text("reset")
                 .style("display", "none");
 
+            // create 'g', inside an SVG element
             g = div.append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
               .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+            // Add the clip path, which is the box that covers the range
             g.append("clipPath")
                 .attr("id", "clip-" + id)
               .append("rect")
                 .attr("width", width)
                 .attr("height", height);
 
+            // Add the background (total stat, grey) and foreground (current stat, blue) bars
             g.selectAll(".bar")
                 .data(["background", "foreground"])
               .enter().append("path")
                 .attr("class", function(d) { return d + " bar"; })
                 .datum(group.all());
 
+            // Adds a clip path association
             g.selectAll(".foreground.bar")
                 .attr("clip-path", "url(#clip-" + id + ")");
 
+            // Add the axis to g
             g.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(0," + height + ")")
@@ -161,10 +167,12 @@
             }
           }
 
+          // Set the .bars to have the bar paths
           g.selectAll(".bar").attr("d", barPath);
         });
 
         function barPath(groups) {
+          // Generates some magic string which draws the bars in the .bar elements
           var path = [],
               i = -1,
               n = groups.length,
@@ -193,11 +201,13 @@
       }
 
       brush.on("brushstart.chart", function() {
+        // display the reset option
         var div = d3.select(this.parentNode.parentNode.parentNode);
         div.select(".title a").style("display", null);
       });
 
       brush.on("brush.chart", function() {
+        // gets the range of clip path and filters on it
         var g = d3.select(this.parentNode),
             extent = brush.extent();
         if (round) g.select(".brush")
@@ -212,8 +222,10 @@
 
       brush.on("brushend.chart", function() {
         if (brush.empty()) {
+          // Hide 'reset' button
           var div = d3.select(this.parentNode.parentNode.parentNode);
           div.select(".title a").style("display", "none");
+          // Reset filters
           div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
           dimension.filterAll();
         }
@@ -226,6 +238,7 @@
       };
 
       chart.x = function(_) {
+        // set x on itself, the axis and the brush
         if (!arguments.length) return x;
         x = _;
         axis.scale(x);
@@ -234,6 +247,7 @@
       };
 
       chart.y = function(_) {
+        // sets x on itself
         if (!arguments.length) return y;
         y = _;
         return chart;
