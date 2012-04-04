@@ -5,7 +5,7 @@
     this.resource_url = 'https://' + this.resource_path;
     this.data = [];
     this.query("SELECT * FROM dugongs LIMIT 10", function(data){
-      window.DUGONG.create_graphs(data);
+      window.DUGONG.create_graphs(data.rows);
     });
   },
   query : function(sql, callback, proxy) {
