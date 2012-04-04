@@ -1,4 +1,4 @@
-$(function() {
+(function() {
 
   // (It's CSV, but GitHub Pages only gzip's JSON at the moment.)
   window.DUGONG.create_graphs = function(dugongs) {
@@ -14,8 +14,8 @@ $(function() {
         all = dugong.groupAll(),
         year = dugong.dimension(function(d) { return d.year; }),
         years = year.group(),
-        season = dugong.dimension(function(d) { return d.distance; }),
-        seasons = seasons.group();
+        season = dugong.dimension(function(d) { return d.season; }),
+        seasons = season.group();
 
     var charts = [
 
@@ -317,4 +317,4 @@ $(function() {
     }
   };
 
-});
+})();
