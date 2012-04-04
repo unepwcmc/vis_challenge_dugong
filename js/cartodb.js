@@ -4,9 +4,8 @@
     this.resource_path = 'carbon-tool.cartodb.com/api/v1/sql';
     this.resource_url = 'https://' + this.resource_path;
     this.data = [];
-    this.query("SELECT * FROM dugongs LIMIT 500", function(data){
+    this.query("SELECT * FROM dugongs LIMIT 100", function(data){
       window.DUGONG.create_graphs(data.rows);
-      //window.DUGONG.draw_dugongs();
     });
   },
   query : function(sql, callback, proxy) {
