@@ -9,6 +9,10 @@
         formatDate = d3.time.format("%B %d, %Y"),
         formatTime = d3.time.format("%I:%M %p");
 
+    // A nest operator, for grouping the flight list.
+    var nestByYear = d3.nest()
+        .key(function(d) { return d3.year; });
+
     // Create the crossfilter for the relevant dimensions and groups.
     var dugong = crossfilter(dugongs),
         all = dugong.groupAll(),
@@ -44,6 +48,11 @@
         .data(charts)
         .each(function(chart) { chart.on("brush", renderAll).on("brushend", renderAll); });
 
+
+    // Render the initial lists.
+    var list = d3.selectAll(".list")
+        .data([dugongList]);
+
     // Render the total.
     d3.selectAll("#total")
         .text(formatNumber(dugong.size()));
@@ -58,6 +67,7 @@
     // Whenever the brush moves, re-rendering everything.
     function renderAll() {
       chart.each(render);
+      list.each(render);
       d3.select("#active").text(formatNumber(all.value()));
     }
 
@@ -79,6 +89,48 @@
       charts[i].filter(null);
       renderAll();
     };
+
+function dugongList(div) {
+    var dugongsByYear = nestByYear.entries(year.top(dugongs.length));
+
+    div.each(function() {
+      
+      var year = d3.select(this).selectAll(".year")
+          .data(dugongsByYear, function(d) { return d.key; });
+
+      year.enter().append("div")
+          .attr("class", "year")
+          .text(function(d) { return d.values[0].year; });
+
+      year.exit().remove();
+
+      var dugong = year.order().selectAll(".dugong")
+          .data(function(d) { return d.values; }, function(d) { return d.index; });
+
+      var dugongEnter = dugong.enter().append("div")
+          .attr("class", "dugong");
+
+      dugongEnter.append("div")
+          .attr("class", "latitude")
+          .text(function(d) { return d.latitude; });
+          
+      dugongEnter.append("div")
+          .attr("class", "longitude")
+          .text(function(d) { return d.longitude; });
+
+      dugongEnter.append("div")
+          .attr("class", "year")
+          .text(function(d) { return d.year; });
+
+      dugongEnter.append("div")
+          .attr("class", "season")
+          .text(function(d) { return d.season; });
+
+      dugong.exit().remove();
+
+      dugong.order();
+    });
+  }
 
     function barChart() {
       if (!barChart.id) barChart.id = 0;
