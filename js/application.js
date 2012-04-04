@@ -28,15 +28,15 @@
           .dimension(year)
           .group(years)
         .x(d3.scale.linear()
-            .domain([2000, 2012])
-            .rangeRound([0, 10 * 24])),
+            .domain([2000, 2012.25])
+            .rangeRound([0, 10 * 60])),
 
       // Season
       barChart()
           .dimension(season)
           .group(seasons)
         .x(d3.scale.linear()
-            .domain([0, 3])
+            .domain([0, 3.25])
             .rangeRound([0, 10 * 24])),
 
     ];
