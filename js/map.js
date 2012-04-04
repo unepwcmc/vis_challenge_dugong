@@ -18,25 +18,27 @@ $(function() {
 
   window.DUGONG.draw_dugongs = function(){
     $.each(window.DUGONG.map_markers, function(idx){
-      //var markerLocation = new L.LatLng(this.latitude, this.longitude);
-      //var marker = new L.Marker(markerLo);
       window.DUGONG.map.addLayer(this);
     });
+    window.DUGONG.map.fitBounds(new L.LatLngBounds(window.DUGONG.latlngs));
   }
 
   window.DUGONG.remove_dugongs = function(){
     $.each(window.DUGONG.map_markers, function(idx){
       window.DUGONG.map.removeLayer(this);
     });
+    window.DUGONG.latlngs = [];
     window.DUGONG.map_markers = [];
   }
 
+  window.DUGONG.latlngs = [];
   window.DUGONG.map_markers = [];
 
   window.DUGONG.map_render = function(){
     window.DUGONG.remove_dugongs();
     $('.dugong').each(function(e){
       var latlng = new L.LatLng($(this).find('.latitude').text(), $(this).find('.longitude').text());
+      window.DUGONG.latlngs.push(latlng);
       window.DUGONG.map_markers.push(new L.Marker(latlng));
     });
     window.DUGONG.draw_dugongs();
