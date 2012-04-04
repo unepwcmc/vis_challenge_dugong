@@ -1,7 +1,7 @@
 $(function() {
 
   // (It's CSV, but GitHub Pages only gzip's JSON at the moment.)
-  d3.csv("/flights-3m.json", function(flights) {
+  window.DUGONG.create_graphs = function(dugongs) {
 
     // Various formatters.
     var formatNumber = d3.format(",d"),
@@ -9,47 +9,27 @@ $(function() {
         formatDate = d3.time.format("%B %d, %Y"),
         formatTime = d3.time.format("%I:%M %p");
 
-    // A nest operator, for grouping the flight list.
-    var nestByDate = d3.nest()
-        .key(function(d) { return d3.time.day(d.date); });
-
-    // A little coercion, since the CSV is untyped.
-    flights.forEach(function(d, i) {
-      d.index = i;
-      d.date = parseDate(d.date);
-      d.delay = +d.delay;
-      d.distance = +d.distance;
-    });
-
     // Create the crossfilter for the relevant dimensions and groups.
-    var flight = crossfilter(flights),
-        all = flight.groupAll(),
-        date = flight.dimension(function(d) { return d3.time.day(d.date); }),
-        dates = date.group(),
-        hour = flight.dimension(function(d) { return d.date.getHours() + d.date.getMinutes() / 60; }),
-        hours = hour.group(Math.floor),
-        delay = flight.dimension(function(d) { return Math.max(-60, Math.min(149, d.delay)); }),
-        delays = delay.group(function(d) { return Math.floor(d / 10) * 10; }),
-        distance = flight.dimension(function(d) { return Math.min(1999, d.distance); }),
-        distances = distance.group(function(d) { return Math.floor(d / 50) * 50; });
+    var dugong = crossfilter(dugongs),
+        all = dugong.groupAll(),
+        year = dugong.dimension(function(d) { return d.year; }),
+        years = year.group(),
+        season = dugong.dimension(function(d) { return d.distance; }),
+        seasons = seasons.group();
 
     var charts = [
 
+      // Year
       barChart()
-          .dimension(hour)
-          .group(hours)
-        .x(d3.scale.linear()
-          .domain([0, 24])
-          .rangeRound([0, 10 * 24])),
+          .dimension(year)
+          .group(years)
+        .x(d3.scale.linear()),
 
+      // Season
       barChart()
-          .dimension(date)
-          .group(dates)
-          .round(d3.time.day.round)
-        .x(d3.time.scale()
-          .domain([new Date(2001, 0, 1), new Date(2001, 3, 1)])
-          .rangeRound([0, 10 * 90]))
-          .filter([new Date(2001, 1, 1), new Date(2001, 2, 1)])
+          .dimension(season)
+          .group(seasons)
+        .x(d3.scale.linear())
 
     ];
 
@@ -60,13 +40,9 @@ $(function() {
         .data(charts)
         .each(function(chart) { chart.on("brush", renderAll).on("brushend", renderAll); });
 
-    // Render the initial lists.
-    var list = d3.selectAll(".list")
-        .data([flightList]);
-
     // Render the total.
     d3.selectAll("#total")
-        .text(formatNumber(flight.size()));
+        .text(formatNumber(dugong.size()));
 
     renderAll();
 
@@ -78,7 +54,6 @@ $(function() {
     // Whenever the brush moves, re-rendering everything.
     function renderAll() {
       chart.each(render);
-      list.each(render);
       d3.select("#active").text(formatNumber(all.value()));
     }
 
@@ -101,12 +76,12 @@ $(function() {
       renderAll();
     };
 
-    function flightList(div) {
-      var flightsByDate = nestByDate.entries(date.top(40));
+    function dugongList(div) {
+      var dugongsByDate = nestByDate.entries(date.top(40));
 
       div.each(function() {
         var date = d3.select(this).selectAll(".date")
-            .data(flightsByDate, function(d) { return d.key; });
+            .data(dugongsByDate, function(d) { return d.key; });
 
         date.enter().append("div")
             .attr("class", "date")
@@ -116,36 +91,36 @@ $(function() {
 
         date.exit().remove();
 
-        var flight = date.order().selectAll(".flight")
+        var dugong = date.order().selectAll(".dugong")
             .data(function(d) { return d.values; }, function(d) { return d.index; });
 
-        var flightEnter = flight.enter().append("div")
-            .attr("class", "flight");
+        var dugongEnter = dugong.enter().append("div")
+            .attr("class", "dugong");
 
-        flightEnter.append("div")
+        dugongEnter.append("div")
             .attr("class", "time")
             .text(function(d) { return formatTime(d.date); });
 
-        flightEnter.append("div")
+        dugongEnter.append("div")
             .attr("class", "origin")
             .text(function(d) { return d.origin; });
 
-        flightEnter.append("div")
+        dugongEnter.append("div")
             .attr("class", "destination")
             .text(function(d) { return d.destination; });
 
-        flightEnter.append("div")
+        dugongEnter.append("div")
             .attr("class", "distance")
             .text(function(d) { return formatNumber(d.distance) + " mi."; });
 
-        flightEnter.append("div")
+        dugongEnter.append("div")
             .attr("class", "delay")
             .classed("early", function(d) { return d.delay < 0; })
             .text(function(d) { return formatChange(d.delay) + " min."; });
 
-        flight.exit().remove();
+        dugong.exit().remove();
 
-        flight.order();
+        dugong.order();
       });
     }
 
@@ -340,6 +315,6 @@ $(function() {
 
       return d3.rebind(chart, brush, "on");
     }
-  });
+  };
 
 });
