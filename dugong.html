@@ -9,6 +9,7 @@
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
     <![endif]-->
+    <link rel="stylesheet" href="styles.css" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
@@ -26,8 +27,12 @@
   <body>
     <div id='map'  style="height: 200px"></div>
     <div id='timelines'>
-      <div id="year-chart" class="chart"></div>
-      <div id="season-chart" class="chart"></div>
+      <div id="year-chart" class="chart">
+        <div class="title">Year</div>
+      </div>
+      <div id="season-chart" class="chart">
+        <div class="title">season</div>
+      </div>
       <div id='total'></div>
     </div>
   </body>

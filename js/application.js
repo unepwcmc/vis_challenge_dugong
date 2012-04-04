@@ -23,13 +23,17 @@
       barChart()
           .dimension(year)
           .group(years)
-        .x(d3.scale.linear()),
+        .x(d3.scale.linear()
+            .domain([2000, 2012])
+            .rangeRound([0, 10 * 24])),
 
       // Season
       barChart()
           .dimension(season)
           .group(seasons)
-        .x(d3.scale.linear())
+        .x(d3.scale.linear()
+            .domain([0, 3])
+            .rangeRound([0, 10 * 24])),
 
     ];
 
@@ -75,54 +79,6 @@
       charts[i].filter(null);
       renderAll();
     };
-
-    function dugongList(div) {
-      var dugongsByDate = nestByDate.entries(date.top(40));
-
-      div.each(function() {
-        var date = d3.select(this).selectAll(".date")
-            .data(dugongsByDate, function(d) { return d.key; });
-
-        date.enter().append("div")
-            .attr("class", "date")
-          .append("div")
-            .attr("class", "day")
-            .text(function(d) { return formatDate(d.values[0].date); });
-
-        date.exit().remove();
-
-        var dugong = date.order().selectAll(".dugong")
-            .data(function(d) { return d.values; }, function(d) { return d.index; });
-
-        var dugongEnter = dugong.enter().append("div")
-            .attr("class", "dugong");
-
-        dugongEnter.append("div")
-            .attr("class", "time")
-            .text(function(d) { return formatTime(d.date); });
-
-        dugongEnter.append("div")
-            .attr("class", "origin")
-            .text(function(d) { return d.origin; });
-
-        dugongEnter.append("div")
-            .attr("class", "destination")
-            .text(function(d) { return d.destination; });
-
-        dugongEnter.append("div")
-            .attr("class", "distance")
-            .text(function(d) { return formatNumber(d.distance) + " mi."; });
-
-        dugongEnter.append("div")
-            .attr("class", "delay")
-            .classed("early", function(d) { return d.delay < 0; })
-            .text(function(d) { return formatChange(d.delay) + " min."; });
-
-        dugong.exit().remove();
-
-        dugong.order();
-      });
-    }
 
     function barChart() {
       if (!barChart.id) barChart.id = 0;
