@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Sound the duGong!</title>
+
+    <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
+    <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
+    
+    <script type='text/javascript'>
+      $(function() {
+          window.DUGONG = {};
+        //Build the map
+        window.DUGONG.map = new L.Map('map', {
+          center: new L.LatLng(51.505, -0.09), 
+          zoom: 13
+        });
+
+        // create a CloudMade tile layer
+        var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/f6825bb39564441ea5548f3886452056/997/256/{z}/{x}/{y}.png',
+        cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18});
+
+        // add the CloudMade layer to the map
+        window.DUGONG.map.addLayer(cloudmade);
+      });
+    </script>
+  </head>
+  <body>
+    <div id='map'  style="height: 200px"></div>
+    <div id='timelines'></div>
+  </body>
+</html>
+
