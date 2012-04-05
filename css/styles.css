@@ -12,13 +12,13 @@ body {
   margin-bottom: 10px;
 }
 
-#tool {
+#main {
   background-color: #FBF6CE;
   color: #111;
   padding: 18px;
   border-radius: 6px;
 }
-#tool p{
+#main p{
   color: #182945;
 }
 
@@ -33,6 +33,10 @@ body {
   display: inline-block;
   height: 151px;
   margin-bottom: 20px;
+}
+
+.chart svg {
+  padding: 3px;
 }
 
 .reset {
