@@ -9,7 +9,9 @@
     <!--[if lte IE 8]>
       <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.ie.css" />
     <![endif]-->
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"></script>
@@ -25,21 +27,26 @@
         
   </head>
   <body>
-    <p>
-      The Dugong is one of the world's most endangered species of marine mammal. A regular monitoring programme in waters of the emirate of Abu Dhabi has been in place since 2000, with surveys covering around 6500 square kilometres. The programme has recorded a healthy population of slightly less than 3000 dugongs, with more recorded in winter than in summer.
-    </p>
-    <div id='map'  style="height: 300px"></div>
-    <div id='timelines'>
-      <div id="year-chart" class="chart">
-        <div class="title"><h4>Year</h4></div>
+    <div class='container main-container'>
+      <h1>Dugong Mapper</h1>
+      <div id='tool'>
+        <p>
+          The Dugong is one of the world's most endangered species of marine mammal. A regular monitoring programme in waters of the emirate of Abu Dhabi has been in place since 2000, with surveys covering around 6500 square kilometres. The programme has recorded a healthy population of slightly less than 3000 dugongs, with more recorded in winter than in summer.
+        </p>
+        <div id='map'  style="height: 300px"></div>
+        <div id='timelines'>
+          <div id="year-chart" class="chart">
+            <div class="title"><h4>Year</h4></div>
+          </div>
+          <div id="season-chart" class="chart">
+            <div class="title"><h4>Season</h4></div>
+          </div>
+          <div id='total'></div>
+        </div>
       </div>
-      <div id="season-chart" class="chart">
-        <div class="title"><h4>Season</h4></div>
+      <div id="lists">
+        <div id="dugong-list" class="list"></div>
       </div>
-      <div id='total'></div>
-    </div>
-    <div id="lists">
-      <div id="dugong-list" class="list"></div>
     </div>
   </body>
 </html>
